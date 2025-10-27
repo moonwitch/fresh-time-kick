@@ -1,0 +1,13 @@
+name: Create Release
+on:
+  push:
+    tags:
+      - "v*.*.*"
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+      - uses: softprops/action-gh-release@v2
+        with:
+          name: fresh-time-kick.zip
