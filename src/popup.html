@@ -1,0 +1,60 @@
+<!doctype html>
+<html>
+    <head>
+        <meta charset="utf-8" />
+        <link rel="stylesheet" href="styles.css" />
+    </head>
+    <body id="popup-page">
+        <h1>Log Actions</h1>
+        <fieldset id="time-fieldset">
+            <legend>
+                <label for="minutes-input">Log Time</label>
+            </legend>
+
+            <div class="row">
+                <label for="minutes-input">Minutes</label>
+                <input id="minutes-input" type="number" min="1" step="1" />
+            </div>
+
+            <div class="row">
+                <label for="note-input">Note</label>
+                <textarea id="note-input"></textarea>
+            </div>
+
+            <div class="checkbox-row">
+                <input id="billable-check" type="checkbox" />
+                <label for="billable-check">Billable</label>
+            </div>
+
+            <div class="checkbox-row" style="margin-top: 10px">
+                <input id="add-as-note-check" type="checkbox" checked />
+                <label for="add-as-note-check">Add as public note</label>
+            </div>
+        </fieldset>
+
+        <fieldset id="status-fieldset">
+            <legend>
+                <input type="checkbox" id="do-update-status" />
+                <label for="do-update-status">Update Status</label>
+            </legend>
+            <div class="row">
+                <label for="status-select">New Status</label>
+                <select id="status-select" style="padding: 8px">
+                    <option value="6">Waiting for Customer</option>
+                    <option value="3">Pending</option>
+                    <option value="8">Pending Resolved</option>
+                    <option value="9">Waiting for 3rd party</option>
+                    <option value="4">Resolved</option>
+                    <option value="5">Closed</option>
+                </select>
+            </div>
+        </fieldset>
+
+        <hr />
+        <button id="submit-btn">Submit</button>
+        <div id="status">Ready</div>
+
+        <script src="config.js"></script>
+        <script src="popup.js"></script>
+    </body>
+</html>

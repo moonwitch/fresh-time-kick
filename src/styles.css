@@ -1,0 +1,184 @@
+/* styles.css */
+:root {
+    --font: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+    --bg: #f9f9f9;
+    --text: #333;
+    --label: #111;
+    --input-bg: #fff;
+    --border: #ddd;
+    --border-focus: #0078d4;
+    --button-bg: #0078d4;
+    --button-text: #fff;
+    --hint: #555;
+}
+
+/* --- Global Styles --- */
+body {
+    font-family: var(--font);
+    color: var(--text);
+    margin: 0;
+    font-size: 14px;
+}
+
+.row {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    margin-bottom: 12px;
+}
+
+label {
+    font-weight: 600;
+    font-size: 13px;
+    color: var(--label);
+}
+
+input[type="number"],
+input[type="text"],
+input[type="password"],
+textarea,
+select {
+    /* Added select */
+    width: 100%;
+    padding: 8px;
+    font-size: 14px;
+    font-family: var(--font);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    background-color: var(--input-bg);
+    box-sizing: border-box;
+}
+
+input:focus,
+textarea:focus,
+select:focus {
+    /* Added select */
+    border-color: var(--border-focus);
+    outline: 2px solid var(--border-focus);
+    outline-offset: -1px;
+}
+
+button {
+    width: 100%;
+    padding: 10px;
+    font-size: 14px;
+    font-weight: 600;
+    background-color: var(--button-bg);
+    color: var(--button-text);
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+}
+button:hover {
+    opacity: 0.9;
+}
+button:disabled {
+    background-color: #aaa;
+    cursor: not-allowed;
+}
+
+.checkbox-row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+.checkbox-row label {
+    font-weight: normal;
+    font-size: 13px;
+}
+.checkbox-row input[type="checkbox"] {
+    width: auto;
+}
+
+.hint {
+    color: var(--hint);
+    font-size: 12px;
+}
+
+/* --- Options Page Specifics --- */
+#options-page {
+    padding: 20px 40px;
+    max-width: 600px;
+    margin: 20px auto;
+    background-color: var(--bg);
+    line-height: 1.6;
+}
+#options-page h1 {
+    color: var(--label);
+    border-bottom: 2px solid var(--border);
+    padding-bottom: 8px;
+}
+#options-page .container {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+#options-page input[type="number"],
+#options-page input[type="text"],
+#options-page input[type="password"] {
+    padding: 10px; /* Larger padding for options page */
+}
+#options-page .hint {
+    margin-top: -2px;
+}
+#options-page .button-row {
+    margin-top: 16px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+#options-page button.save {
+    width: auto;
+    padding: 10px 16px;
+}
+
+/* --- Popup Page Specifics (Cleaned up) --- */
+#popup-page {
+    width: 320px;
+    padding: 16px;
+}
+#popup-page fieldset {
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 10px 12px 12px 12px;
+    margin-bottom: 12px;
+}
+#popup-page legend {
+    font-weight: 600;
+    font-size: 13px;
+    color: var(--label);
+    padding: 0 4px;
+    margin-left: 4px;
+}
+#popup-page legend input[type="checkbox"] {
+    margin-right: 6px;
+    vertical-align: middle;
+}
+#popup-page .row {
+    margin-bottom: 10px;
+}
+#popup-page textarea {
+    min-height: 60px;
+    resize: vertical;
+}
+#popup-page .checkbox-row {
+    margin-top: -4px;
+}
+#popup-page hr {
+    margin: 16px 0;
+    border: none;
+    border-top: 1px solid #eee;
+}
+#popup-page #status {
+    color: var(--hint);
+    margin-top: 10px;
+    display: block;
+    min-height: 1.2em;
+    text-align: center;
+}
+
+/* This now correctly targets all controls */
+fieldset:disabled .row,
+fieldset:disabled .checkbox-row {
+    opacity: 0.6;
+}

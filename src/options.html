@@ -1,0 +1,88 @@
+<!doctype html>
+<html>
+    <head>
+        <meta charset="utf-8" />
+        <title>Freshservice Time Kick – Options</title>
+        <link rel="stylesheet" href="styles.css" />
+    </head>
+    <body id="options-page">
+        <h1>Freshservice Time Kick</h1>
+        <p>
+            Configure API access and time entry defaults. All settings are
+            synced.
+        </p>
+
+        <div class="container">
+            <fieldset>
+                <legend><h3>API Configuration</h3></legend>
+                <div class="row">
+                    <label for="domain">Freshservice Domain</label>
+                    <input
+                        id="domain"
+                        type="text"
+                        placeholder="e.g., loop.freshservice.com"
+                    />
+                    <div class="hint">
+                        Your full Freshservice domain. No 'https" or '/'.
+                    </div>
+                </div>
+                <div class="row">
+                    <label for="apikey">Freshservice API Key</label>
+                    <input
+                        id="apikey"
+                        type="password"
+                        placeholder="Your API key"
+                    />
+                    <div class="hint">
+                        Find this in your Freshservice profile settings.
+                    </div>
+                </div>
+                <div class="row">
+                    <label for="email">Your Agent Email</label>
+                    <input
+                        id="email"
+                        type="text"
+                        placeholder="e.g., kelly@loopearplugs.com"
+                    />
+                    <div class="hint">
+                        The email you use to log in to Freshservice.
+                    </div>
+                </div>
+            </fieldset>
+
+            <fieldset>
+                <legend><h3>Time Entry Defaults</h3></legend>
+                <div class="row">
+                    <label for="minutes">Default minutes</label>
+                    <input
+                        id="minutes"
+                        type="number"
+                        min="1"
+                        step="1"
+                        value="15"
+                    />
+                </div>
+                <div class="row">
+                    <label for="note">Default note</label>
+                    <input
+                        id="note"
+                        type="text"
+                        placeholder="Work in progress – auto-started"
+                    />
+                </div>
+                <div class="checkbox-row" style="margin-top: 10px">
+                    <input id="billable" type="checkbox" />
+                    <label for="billable">Default to Billable</label>
+                </div>
+            </fieldset>
+
+            <div class="button-row">
+                <button class="save" id="save">Save</button>
+                <span id="status" class="hint"></span>
+            </div>
+        </div>
+
+        <script src="config.js"></script>
+        <script src="options.js"></script>
+    </body>
+</html>
