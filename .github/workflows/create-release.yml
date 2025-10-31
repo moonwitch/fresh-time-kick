@@ -19,13 +19,13 @@ jobs:
         env:
           TAG_PREFIX: v
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          DRY_RUN: true
 
-      - name: Automatic Releases
-        uses: marvinpinto/action-automatic-releases@v1.2.1
+      - name: Create Release
+        id: release
+        uses: ncipollo/release-action@v1.20.0
         with:
-          repo_token: "${{ secrets.GITHUB_TOKEN }}"
-          automatic_release_tag: "latest"
+          makeLatest: true
+          name: Fresh Time Kick v${{ github.ref_name }}
 
       - name: Curl zip
         shell: bash
@@ -34,7 +34,7 @@ jobs:
             -H "X-ClientID: ${{ secrets.EDGE_CLIENT_ID }}" \
             -H "Content-Type: application/zip" \
             -X POST \
-            -T fresh-time-kick-${GITHUB_REF#refs/*/}.zip \
+            -T ${{ steps.release.outputs.zipball_url }} \
             -v \
             https://api.addons.microsoftedge.microsoft.com/v1/products/${{ secrets.EDGE_PRODUCT_ID }}/submissions/draft/package/package
       - name: Curl publish
