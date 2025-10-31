@@ -26,6 +26,7 @@ jobs:
         uses: ncipollo/release-action@v1.20.0
         with:
           makeLatest: true
+          tag: ${{ steps.tag.outputs.tag }}
 
       - name: Curl zip
         shell: bash
