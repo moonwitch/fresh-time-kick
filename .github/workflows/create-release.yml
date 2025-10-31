@@ -19,13 +19,14 @@ jobs:
         env:
           TAG_PREFIX: v
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          DRY_RUN: true
 
-      - name: GH Release
-        uses: softprops/action-gh-release@v2.4.1
-        if: github.ref_type == 'tag'
+      - name: Automatic Releases
+        uses: marvinpinto/action-automatic-releases@v1.2.1
         with:
-          name: fresh-time-kick-${{ github.ref }}.zip
-      
+          repo_token: "${{ secrets.GITHUB_TOKEN }}"
+          automatic_release_tag: "latest"
+
       - name: Curl zip
         shell: bash
         run: |
