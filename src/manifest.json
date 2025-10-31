@@ -1,7 +1,7 @@
 {
   "manifest_version": 3,
   "name": "Freshservice Time Kick (API)",
-  "version": "2.2.3",
+  "version": "2.2.4",
   "description": "Logs time to Freshservice tickets via the API.",
   "permissions": ["storage", "tabs"],
   "host_permissions": ["https://*.freshservice.com/api/v2/*"],
