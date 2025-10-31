@@ -25,6 +25,7 @@ jobs:
         if: github.ref_type == 'tag'
         with:
           name: fresh-time-kick-${{ github.ref }}.zip
+      
       - name: Curl zip
         shell: bash
         run: |
@@ -32,7 +33,7 @@ jobs:
             -H "X-ClientID: ${{ secrets.EDGE_CLIENT_ID }}" \
             -H "Content-Type: application/zip" \
             -X POST \
-            -T fresh-time-kick-${{ github.ref }}.zip \
+            -T fresh-time-kick-${GITHUB_REF#refs/*/}.zip \
             -v \
             https://api.addons.microsoftedge.microsoft.com/v1/products/${{ secrets.EDGE_PRODUCT_ID }}/submissions/draft/package/package
       - name: Curl publish
