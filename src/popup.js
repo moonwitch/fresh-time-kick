@@ -3,7 +3,7 @@
 // --- Global Elements ---
 let elements = {};
 
-// --- Helpers (unchanged) ---
+// --- Helpers ---
 function toHHMM(mins) {
   const h = Math.floor(mins / 60),
     m = mins % 60;
@@ -14,7 +14,7 @@ function setStatus(message, isError = false) {
   elements.status.style.color = isError ? "red" : "#555";
 }
 
-// --- API Function 1: Agent ID (unchanged) ---
+// --- API Function 1: Agent ID ---
 async function getAgentId(config) {
   if (config.agentId) return config.agentId;
   setStatus("Fetching agent details...");
@@ -45,7 +45,7 @@ async function getAgentId(config) {
   }
 }
 
-// --- API Function 2: Log Time (unchanged) ---
+// --- API Function 2: Log Time ---
 async function callLogTimeAPI(config, ticketId, minutesToLog, note, billable) {
   const apiUrl = `https://${config.fsDomain}/api/v2/tickets/${ticketId}/time_entries`;
   const timeString = toHHMM(minutesToLog);
@@ -67,7 +67,7 @@ async function callLogTimeAPI(config, ticketId, minutesToLog, note, billable) {
   return await response.json();
 }
 
-// --- API Function 3: Update Status (unchanged) ---
+// --- API Function 3: Update Status ---
 async function callUpdateStatusAPI(config, ticketId, newStatus) {
   const apiUrl = `https://${config.fsDomain}/api/v2/tickets/${ticketId}`;
   const authHeader = `Basic ${btoa(config.fsApiKey + ":X")}`;
@@ -83,7 +83,7 @@ async function callUpdateStatusAPI(config, ticketId, newStatus) {
   return await response.json();
 }
 
-// --- API Function 4: Add Note (unchanged) ---
+// --- API Function 4: Add Note ---
 async function callAddNoteAPI(config, ticketId, note, isPrivate) {
   const apiUrl = `https://${config.fsDomain}/api/v2/tickets/${ticketId}/notes`;
   const authHeader = `Basic ${btoa(config.fsApiKey + ":X")}`;
@@ -100,7 +100,7 @@ async function callAddNoteAPI(config, ticketId, note, isPrivate) {
   return await response.json();
 }
 
-// --- Error Handler (unchanged) ---
+// --- Error Handler ---
 async function handleApiError(error) {
   let errorMessage = error.message;
   // Try to parse a JSON error from the API
@@ -120,7 +120,7 @@ async function handleApiError(error) {
   setStatus(errorMessage, true);
 }
 
-// --- INIT (Updated Logic) ---
+// --- INIT ---
 document.addEventListener("DOMContentLoaded", () => {
   // Store all elements for easy access
   elements = {
@@ -131,7 +131,8 @@ document.addEventListener("DOMContentLoaded", () => {
     minutesInput: document.getElementById("minutes-input"),
     noteInput: document.getElementById("note-input"),
     billableCheck: document.getElementById("billable-check"),
-    addAsNoteCheck: document.getElementById("add-as-note-check"),
+    publicNoteRow: document.getElementById("public-note-row"),
+    noteIsPublicCheck: document.getElementById("note-is-public-check"),
 
     // Status (optional)
     doUpdateStatus: document.getElementById("do-update-status"),
@@ -149,6 +150,14 @@ document.addEventListener("DOMContentLoaded", () => {
     // Set initial disabled state for Status fieldset
     elements.statusFieldset.disabled = true; // Start disabled
     elements.doUpdateStatus.checked = false; // Start unchecked
+
+    // Set note privacy defaults
+    elements.noteIsPublicCheck.checked = false; // Default to private
+
+    // Hide the public note option if notes are disabled globally
+    if (config.doNotAddNote) {
+      elements.publicNoteRow.style.display = "none";
+    }
   });
 
   // 2. Event listeners for toggling fieldsets
@@ -185,7 +194,8 @@ document.addEventListener("DOMContentLoaded", () => {
 
       // --- 3. Get values from the form ---
       const doUpdateStatus = elements.doUpdateStatus.checked;
-      const doAddNote = elements.addAsNoteCheck.checked;
+      const doAddNote = !config.doNotAddNote; // <-- Use global config setting
+      const isPublicNote = elements.noteIsPublicCheck.checked; // <-- Read privacy checkbox
 
       const minutesToLog = parseInt(elements.minutesInput.value, 10);
       const note = elements.noteInput.value.trim();
@@ -229,8 +239,10 @@ document.addEventListener("DOMContentLoaded", () => {
         apiPromises.push(callUpdateStatusAPI(config, ticketId, newStatus));
       }
       if (doAddNote) {
-        // We assume "Add as Note" means a public note (isPrivate = false)
-        apiPromises.push(callAddNoteAPI(config, ticketId, note, false));
+        // Use the checkbox to determine privacy.
+        // isPrivate = !isPublicNote
+        const isPrivate = !isPublicNote;
+        apiPromises.push(callAddNoteAPI(config, ticketId, note, isPrivate));
       }
 
       await Promise.all(apiPromises);
