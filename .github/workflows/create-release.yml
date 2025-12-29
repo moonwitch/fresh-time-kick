@@ -13,12 +13,18 @@ jobs:
     steps:
       - name: Checkout repo
         uses: actions/checkout@v5
-
+      
+      - name: Get JSON Property
+        uses: notiz-dev/github-action-json-property@release
+        with: 
+          path: 'manifest.json'
+          prop_path: 'version'
+        id: version
       - name: Github Tag Bump
         id: tag
         uses: anothrNick/github-tag-action@1.75.0
         env:
-          TAG_PREFIX: v
+          CUSTOM_TAG: ${{ steps.version.outputs.prop }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Create Release
@@ -26,24 +32,14 @@ jobs:
         uses: ncipollo/release-action@v1.20.0
         with:
           makeLatest: true
-          tag: ${{ steps.tag.outputs.tag }}
+          tag: ${{ steps.tag.outputs.new_tag }}
 
-      - name: Curl zip
-        shell: bash
-        run: |
-          curl -H "Authorization: ApiKey ${{ secrets.EDGE_CLIENT_SECRET }}" \
-            -H "X-ClientID: ${{ secrets.EDGE_CLIENT_ID }}" \
-            -H "Content-Type: application/zip" \
-            -X POST \
-            -T https://github.com/moonwitch/fresh-time-kick/archive/refs/tags/${{ steps.tag.outputs.new_tag }}.zip \
-            -v \
-            https://api.addons.microsoftedge.microsoft.com/v1/products/${{ secrets.EDGE_PRODUCT_ID }}/submissions/draft/package/package
-      - name: Curl publish
-        shell: bash
-        run: |
-          curl -H "Authorization: ApiKey ${{ secrets.EDGE_CLIENT_SECRET }}" \
-            -H "X-ClientID: ${{ secrets.EDGE_CLIENT_ID }}" \
-            -X POST \
-            -d '{ "notes"="Update" }' \
-            -v \
-            https://api.addons.microsoftedge.microsoft.com/v1/products/${{ secrets.EDGE_PRODUCT_ID }}/submissions
+      # - name: Upload to Chrome Web Store
+      #   uses: mobilefirstllc/cws-publish@latest
+      #   with:
+      #     action: 'publish'  # one of: upload, publish, testers
+      #     client_id: ${{ secrets.CLIENT }}
+      #     client_secret: ${{ secrets.SECRET }}
+      #     refresh_token: ${{ secrets.TOKEN }}
+      #     extension_id: '32-CHAR EXTENSION ID' 
+      #     zip_file: 'ZIP FILE PATH'
